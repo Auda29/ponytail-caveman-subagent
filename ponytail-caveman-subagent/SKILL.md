@@ -1,89 +1,57 @@
 ---
 name: ponytail-caveman-subagent
 description: >-
-  Rules for delegating a bounded coding, debugging, review, or research task to
-  a subagent: how to write the assignment, how to pass the worker instructions
-  verbatim, and how to evaluate the compact handoff. Use whenever you are about
-  to delegate such a task and delegation is already allowed; this skill never
-  by itself justifies delegating.
+  Delegate bounded coding, debugging, review, or research with minimal complete
+  changes and concise, evidence-based handoffs. Use when delegation is already
+  allowed and useful; this skill does not authorize or require spawning agents.
 ---
 
-# Delegation: Minimal Solution, Compact Handoff
+# Delegate a bounded task
 
-This file is for the delegating (parent) agent. The subagent's rules are in
-`references/worker-instructions.md`. Do not apply those rules to your own work;
-you coordinate, write assignments, and evaluate results.
+These instructions are for the parent. Worker rules live in
+`references/worker-instructions.md`; apply them only to the assigned worker.
+Follow host and project instructions. If delegation is unavailable, do the work locally.
 
-## 1. Whether to delegate is decided elsewhere
+## Load the worker rules once
 
-Delegate only when the user, the host, and its configuration allow it and the
-task can be described completely in one bounded assignment. If delegation is
-not allowed or not supported, do the work yourself and do not mention this
-skill. Do not delegate a task that first needs a decision from the user; get
-the decision, then delegate.
+Read the worker instructions and pass their complete text into each fresh worker
+context, unless the host demonstrably loads that exact content as its agent prompt.
+A name, description, or version label alone is not proof. Reuse the loaded rules
+for follow-ups in the same preserved context. After reset, uncertain compaction,
+or a rules update, supply the current rules again.
 
-## 2. Pass the worker instructions
+## Give three essentials
 
-- Read `references/worker-instructions.md` (through the host's skill tool if
-  it loads skill files, otherwise as a file) and put its full text verbatim
-  into the subagent's prompt or context, before the assignment.
-- Do this on every delegation, even if a subagent type seems to carry the
-  instructions already. A description is not proof; a duplicate costs a few
-  tokens, a missing block costs the limits you are delegating.
-- Never summarize, shorten, or paraphrase it.
-- If the host accepts an output schema, also pass the handoff schema below.
+- **Outcome:** the problem to solve, with enough context to work independently.
+- **Write boundary:** permitted files/directories, or `none`.
+- **Done when:** observable acceptance criteria.
 
-## 3. Write the assignment
+Default to read-only review/research; an explicit implementation request permits
+edits only inside its boundary. No nested agents, commits, installs, deployment,
+or external writes/messages unless authorized. Read-only network research is
+allowed when needed by the assignment and permitted by the host.
 
-Do not assume the subagent can see your conversation history. Every
-assignment is self-contained and states:
+Add required checks, budgets, decisions, known failures, or special permissions
+only when relevant. Resolve missing user decisions before delegation. Give
+parallel workers disjoint write boundaries; isolate worktrees or shared build
+state when file separation is insufficient.
 
-- **Outcome:** what must be true when the task is done.
-- **Mode:** implement, review, or research.
-- **Write boundary:** the files or directories it may edit; none for review or
-  research.
-- **Acceptance criteria:** how done is recognized.
-- **Required checks:** exact commands, if any.
-- **Budget:** limits on time, iterations, or sources, if any.
-- **Authorized actions:** anything beyond local edits and checks (commit,
-  network, installing packages, external services). Default: none.
-- **Context it cannot discover itself:** decisions already made, user
-  constraints, known failures, relevant paths.
-
-Parallel subagents get disjoint write boundaries. If two tasks need the same
-file, run them one after the other or merge them into one assignment.
-
-## 4. Evaluate the handoff
-
-Treat a handoff as a claim, not as a result. Check in proportion to the stakes.
-
-- **done:** confirm the acceptance criteria against the reported evidence. Look
-  at the diff for edits outside the write boundary. Rerun a decisive check
-  yourself when the claim matters and the check is cheap.
-- **partial / blocked:** resolve before reporting completion. Answer the
-  question and delegate again, ask the user for a missing decision or
-  permission, or finish the remaining work yourself. Anything still open goes
-  to the user explicitly.
-- Never upgrade the subagent's evidence: unperformed checks stay unperformed,
-  a build stays a build, a proposed fix stays a proposal.
-- Report to the user in your own words; quote the handoff only when its exact
-  wording matters.
-
-## Handoff schema
-
-For hosts that accept an output schema. It matches the text format in the
-worker instructions.
-
-```json
-{
-  "type": "object",
-  "required": ["status", "result", "changes_evidence", "checks", "open"],
-  "properties": {
-    "status": { "enum": ["done", "partial", "blocked"] },
-    "result": { "type": "string", "description": "Outcome; decisive cause or finding when relevant" },
-    "changes_evidence": { "type": "string", "description": "Edited paths, or findings with code locations / source links" },
-    "checks": { "type": "string", "description": "Commands with baseline vs. final results; what was not run and why" },
-    "open": { "type": "string", "description": "Assumptions, unresolved dependencies, risks, blocking questions; 'none' if none" }
-  }
-}
+```text
+Outcome: Fix the parser crash on an empty list.
+Write boundary: src/parser.py and tests/test_parser.py.
+Done when: Empty input works; existing parsing behavior is preserved.
 ```
+
+## Check the result
+
+Check acceptance criteria, evidence, and the worker's attributable diff against
+its starting state. Do not attribute concurrent workers' edits to this worker.
+Repeat a decisive check when risk, doubt, or cheap independent confirmation
+justifies it; do not repeat every check automatically.
+
+Resolve `partial` or `blocked` work before claiming completion. Preserve missing
+checks and uncertainty in the user-facing report. Never upgrade build, simulation,
+or proposed-fix evidence into runtime, hardware, or implemented-fix claims.
+
+If the host needs JSON, use `references/handoff.schema.json`; otherwise accept
+the worker's compact text format. Report the result in your own words.

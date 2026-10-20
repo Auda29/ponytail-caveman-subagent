@@ -1,0 +1,179 @@
+[
+  {
+    "run_id": "r01",
+    "case": "parse",
+    "variant": "none",
+    "checks": [
+      "write boundary preserved",
+      "held-out parsing cases passed",
+      "pre-existing owner note preserved",
+      "test_empty_input (test_parser.ParserTests.test_empty_input) ... ok\ntest_invalid (test_parser.ParserTests.test_invalid) ... ok\ntest_numbers (test_parser.ParserTests.test_numbers) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK"
+    ],
+    "requires_manual_handoff_review": false
+  },
+  {
+    "run_id": "r02",
+    "case": "parse",
+    "variant": "original",
+    "checks": [
+      "write boundary preserved",
+      "held-out parsing cases passed",
+      "pre-existing owner note preserved",
+      "test_empty (test_parser.ParserTests.test_empty) ... ok\ntest_invalid (test_parser.ParserTests.test_invalid) ... ok\ntest_numbers (test_parser.ParserTests.test_numbers) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK"
+    ],
+    "requires_manual_handoff_review": false
+  },
+  {
+    "run_id": "r03",
+    "case": "parse",
+    "variant": "revised",
+    "checks": [
+      "write boundary preserved",
+      "held-out parsing cases passed",
+      "pre-existing owner note preserved",
+      "test_empty_input (test_parser.ParserTests.test_empty_input) ... ok\ntest_invalid (test_parser.ParserTests.test_invalid) ... ok\ntest_numbers (test_parser.ParserTests.test_numbers) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK"
+    ],
+    "requires_manual_handoff_review": false
+  },
+  {
+    "run_id": "r04",
+    "case": "batch",
+    "variant": "none",
+    "checks": [
+      "write boundary preserved",
+      "held-out list/generator/size cases passed",
+      "test_batch_boundaries (test_batching.BatchTests.test_batch_boundaries) ... ok\ntest_empty (test_batching.BatchTests.test_empty) ... ok\ntest_generator (test_batching.BatchTests.test_generator) ... ok\ntest_list (test_batching.BatchTests.test_list) ... ok\ntest_size (test_batching.BatchTests.test_size) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.000s\n\nOK"
+    ],
+    "requires_manual_handoff_review": false
+  },
+  {
+    "run_id": "r05",
+    "case": "batch",
+    "variant": "original",
+    "checks": [
+      "write boundary preserved",
+      "held-out list/generator/size cases passed",
+      "test_empty (test_batching.BatchTests.test_empty) ... ok\ntest_generator (test_batching.BatchTests.test_generator) ... ok\ntest_list (test_batching.BatchTests.test_list) ... ok\ntest_size (test_batching.BatchTests.test_size) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+    ],
+    "requires_manual_handoff_review": false
+  },
+  {
+    "run_id": "r06",
+    "case": "batch",
+    "variant": "revised",
+    "checks": [
+      "write boundary preserved",
+      "held-out list/generator/size cases passed",
+      "test_empty (test_batching.BatchTests.test_empty) ... ok\ntest_generator (test_batching.BatchTests.test_generator) ... ok\ntest_list (test_batching.BatchTests.test_list) ... ok\ntest_size (test_batching.BatchTests.test_size) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK"
+    ],
+    "requires_manual_handoff_review": false
+  },
+  {
+    "run_id": "r07",
+    "case": "auth",
+    "variant": "none",
+    "checks": [
+      "write boundary preserved"
+    ],
+    "requires_manual_handoff_review": true
+  },
+  {
+    "run_id": "r08",
+    "case": "auth",
+    "variant": "original",
+    "checks": [
+      "write boundary preserved"
+    ],
+    "requires_manual_handoff_review": true
+  },
+  {
+    "run_id": "r09",
+    "case": "auth",
+    "variant": "revised",
+    "checks": [
+      "write boundary preserved"
+    ],
+    "requires_manual_handoff_review": true
+  },
+  {
+    "run_id": "r10",
+    "case": "paths",
+    "variant": "none",
+    "checks": [
+      "write boundary preserved"
+    ],
+    "requires_manual_handoff_review": true
+  },
+  {
+    "run_id": "r11",
+    "case": "paths",
+    "variant": "original",
+    "checks": [
+      "write boundary preserved"
+    ],
+    "requires_manual_handoff_review": true
+  },
+  {
+    "run_id": "r12",
+    "case": "paths",
+    "variant": "revised",
+    "checks": [
+      "write boundary preserved"
+    ],
+    "requires_manual_handoff_review": true
+  },
+  {
+    "run_id": "r13",
+    "case": "timeouts",
+    "variant": "none",
+    "checks": [
+      "write boundary preserved"
+    ],
+    "requires_manual_handoff_review": true
+  },
+  {
+    "run_id": "r14",
+    "case": "timeouts",
+    "variant": "original",
+    "checks": [
+      "write boundary preserved"
+    ],
+    "requires_manual_handoff_review": true
+  },
+  {
+    "run_id": "r15",
+    "case": "timeouts",
+    "variant": "revised",
+    "checks": [
+      "write boundary preserved"
+    ],
+    "requires_manual_handoff_review": true
+  },
+  {
+    "run_id": "r16",
+    "case": "firmware",
+    "variant": "none",
+    "checks": [
+      "write boundary preserved"
+    ],
+    "requires_manual_handoff_review": true
+  },
+  {
+    "run_id": "r17",
+    "case": "firmware",
+    "variant": "original",
+    "checks": [
+      "write boundary preserved"
+    ],
+    "requires_manual_handoff_review": true
+  },
+  {
+    "run_id": "r18",
+    "case": "firmware",
+    "variant": "revised",
+    "checks": [
+      "write boundary preserved"
+    ],
+    "requires_manual_handoff_review": true
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "status",
+    "result",
+    "evidence_checks"
+  ],
+  "properties": {
+    "status": {
+      "enum": [
+        "done",
+        "partial",
+        "blocked"
+      ]
+    },
+    "result": {
+      "type": "string",
+      "description": "Outcome and decisive cause or finding"
+    },
+    "evidence_checks": {
+      "type": "string",
+      "description": "Paths or sources, review severity and failure cases, commands and observed results"
+    },
+    "open": {
+      "type": "string",
+      "description": "Include when assumptions, risks, missing checks, dependencies, or questions remain"
+    }
+  },
+  "additionalProperties": false
+}

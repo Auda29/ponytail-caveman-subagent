@@ -1,0 +1,79 @@
+[
+  {
+    "id": "parse",
+    "kind": "bugfix",
+    "outcome": "Fix parse_values: an empty or whitespace-only input must return []; ordinary comma-separated numbers must still parse and malformed non-empty fields must still raise ValueError.",
+    "boundary": [
+      "parser.py",
+      "test_parser.py"
+    ],
+    "done": "Behavior meets that contract and is verified with focused tests.",
+    "files": {
+      "parser.py": "def parse_values(text):\n    return [float(part.strip()) for part in text.split(',')]\n",
+      "test_parser.py": "import unittest\nfrom parser import parse_values\n\nclass ParserTests(unittest.TestCase):\n    def test_numbers(self):\n        self.assertEqual(parse_values('1, 2.5'), [1.0, 2.5])\n    def test_invalid(self):\n        with self.assertRaises(ValueError):\n            parse_values('1,nope')\n\nif __name__ == '__main__':\n    unittest.main()\n"
+    },
+    "dirty": {
+      "parser.py": "\n# Existing owner note: preserve decimal parsing behavior.\n"
+    }
+  },
+  {
+    "id": "batch",
+    "kind": "bugfix",
+    "outcome": "Fix batches so that single-use generators and ordinary lists yield all items exactly once in ordered batches. Keep the final short batch; reject nonpositive sizes with ValueError.",
+    "boundary": [
+      "batching.py",
+      "test_batching.py"
+    ],
+    "done": "Lists, generators, empty input, and invalid sizes behave as specified; focused tests pass.",
+    "files": {
+      "batching.py": "def batches(items, size):\n    if size <= 0:\n        raise ValueError('size must be positive')\n    if not list(items):\n        return []\n    items = list(items)\n    return [items[i:i + size] for i in range(0, len(items), size)]\n",
+      "test_batching.py": "import unittest\nfrom batching import batches\n\nclass BatchTests(unittest.TestCase):\n    def test_list(self):\n        self.assertEqual(batches([1,2,3], 2), [[1,2],[3]])\n    def test_size(self):\n        with self.assertRaises(ValueError):\n            batches([1], 0)\n\nif __name__ == '__main__':\n    unittest.main()\n"
+    }
+  },
+  {
+    "id": "auth",
+    "kind": "review",
+    "outcome": "Review auth.py against CONTRACT.md. Report actionable correctness or access-control defects with concrete evidence; do not edit files.",
+    "boundary": [],
+    "done": "Findings identify their locations, consequences, and concrete failure cases; distinguish claims from executed checks.",
+    "files": {
+      "auth.py": "def may_read(user, document, now):\n    if user['revoked']:\n        return False\n    if now > user['expires_at']:\n        return False\n    return document['tenant_id'].startswith(user['tenant_id'])\n",
+      "CONTRACT.md": "# Access contract\nTenant identifiers are exact opaque strings. Each user may read only their own tenant's documents.\nA token is valid only while now < expires_at. Both timestamps use integer UTC seconds.\nRevoked users must always be denied. Example tenants: acme and acme-partner are unrelated.\n"
+    }
+  },
+  {
+    "id": "paths",
+    "kind": "review",
+    "outcome": "Review resolve_export in export.py against CONTRACT.md. Report actionable defects with concrete evidence; do not edit files.",
+    "boundary": [],
+    "done": "Review states affected location, consequence, and a concrete failing scenario, while accurately describing any checks run.",
+    "files": {
+      "export.py": "from pathlib import Path\n\ndef resolve_export(root, name):\n    root = Path(root).resolve()\n    target = (root / name).resolve()\n    if not str(target).startswith(str(root)):\n        raise ValueError('outside export root')\n    return target\n",
+      "CONTRACT.md": "# Export contract\nEvery accepted path must be inside root or equal to root after resolving symlinks.\nUntrusted callers supply name. A sibling directory whose name shares root's prefix is outside root.\nThe function returns a path; file writing is handled by another service.\n"
+    }
+  },
+  {
+    "id": "timeouts",
+    "kind": "research",
+    "outcome": "Using only the supplied project documents, determine the effective configured timeout in milliseconds for release 2, explain the apparent default discrepancy, and assess what the build log establishes about physical response time.",
+    "boundary": [],
+    "done": "Answer cites file locations, preserves numbers and units, and separates configuration evidence from actual hardware verification.",
+    "files": {
+      "release-2.md": "# Release 2\nThe default response_timeout_ms is 500 ms, replacing the release-1 default of 1000 ms.\nExplicit application settings override defaults. No hardware measurements are included in these notes.\n",
+      "app-config.json": "{\n  \"release\": 2,\n  \"response_timeout_ms\": 750\n}\n",
+      "build.log": "compile: passed\nunit tests: passed\nhardware tests: NOT RUN (device unavailable)\n",
+      "release-1.md": "# Release 1 (superseded defaults)\nThe default response timeout is 1000 ms.\n"
+    }
+  },
+  {
+    "id": "firmware",
+    "kind": "research",
+    "outcome": "Using only the supplied project documents, determine whether the installed gateway can support a 50 ms sampling interval. State any useful established facts and any exact missing information needed for a conclusion.",
+    "boundary": [],
+    "done": "Answer is source-backed, makes no unsupported compatibility claim, and identifies any unresolved prerequisite precisely.",
+    "files": {
+      "compatibility.md": "# Sampling support\nModel Alder supports 50 ms sampling starting with firmware 3.2.\nModel Birch supports 50 ms sampling starting with firmware 4.0.\nOlder firmware supports a minimum interval of 100 ms.\nThis table describes vendor capabilities, not the installed device.\n",
+      "inventory.md": "# Installed gateway\nDevice label: workshop-gateway\nModel: not recorded\nFirmware: not recorded\nNetwork address: assigned dynamically\n"
+    }
+  }
+]
