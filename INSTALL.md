@@ -1,34 +1,48 @@
 # Installation
 
-## 1. Skill (all hosts)
+Copy the `ponytail-caveman-subagent/` folder to
+`~/.agents/skills/ponytail-caveman-subagent/`. Keep this as the canonical copy.
 
-Copy the folder to one fixed location:
+## OpenCode
 
+OpenCode discovers `~/.agents/skills/`. Merge `agent.worker` from
+`opencode-worker.json` into `~/.config/opencode/opencode.json` without replacing
+other configuration. The worker now loads its instructions through `prompt`;
+the parent supplies only the task when that loading is verified.
+
+The example's `{file:../../.agents/skills/...}` path is relative to the config
+file, and assumes the exact locations above. For a custom config directory,
+project config, or relocated skill, replace it with the correct relative or
+absolute path. Restart the host after updating the worker rules.
+
+Check the resolved file before relying on prompt loading. Then start a fresh
+worker with a read-only task and verify it uses the loaded handoff format.
+A JSON parse or file-existence check alone does not prove runtime injection.
+
+The configuration restricts selected Git commands and nested delegation; it is
+not a shell/filesystem sandbox. Use host isolation for enforced boundaries.
+It uses the documented `agent`, `mode`, `prompt`, and `permission` fields;
+verify your installed host version before translating to a different format.
+
+Sources: [agents and prompt files](https://opencode.ai/docs/agents/#prompt),
+[skill discovery](https://opencode.ai/docs/skills/).
+
+## Hermes and other hosts
+
+For Hermes, add the canonical skill directory to `~/.hermes/config.yaml`:
+
+```yaml
+skills:
+  external_dirs:
+    - ~/.agents/skills
 ```
-~/.agents/skills/ponytail-caveman-subagent/
-├── SKILL.md
-└── references/worker-instructions.md
-```
 
-- **OpenCode (V1):** discovers `~/.agents/skills/` automatically.
-- **Hermes:** add the directory to `~/.hermes/config.yaml`:
+Source: [Hermes external skill directories](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills/#external-skill-directories).
 
-  ```yaml
-  skills:
-    external_dirs:
-      - ~/.agents/skills
-  ```
+If the host does not demonstrably load a dedicated worker prompt, the parent
+passes `references/worker-instructions.md` in full at the start of each fresh
+worker context. Follow-ups reuse it only while that context is preserved.
+Reload after reset, uncertain compaction, or an instructions update.
 
-Keep only this one copy; do not duplicate it into other skill directories.
-
-## 2. OpenCode worker agent (optional)
-
-Merge the `agent.worker` block from `opencode-worker.json` into
-`~/.config/opencode/opencode.json`. It adds a subagent with permission limits
-(no nested agents, no `git push`/`git clean`, confirmation for commit, reset,
-checkout, restore, stash). It carries no prompt of its own: the parent passes
-the worker instructions on every delegation, as `SKILL.md` requires.
-
-The block uses the V1 config format. OpenCode V2 (beta) translates V1 config;
-if you convert the file to V2 fields, convert all of it; the V2 docs advise
-against mixing V1 and V2 field names in one file.
+OpenCode and Hermes runtime installation have not been exercised by this
+repository's local validation; check on the target host before relying on it.

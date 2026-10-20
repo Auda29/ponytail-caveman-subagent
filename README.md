@@ -1,22 +1,44 @@
 # Ponytail Caveman Subagent
 
-A delegation skill for bounded coding, debugging, review, and research tasks. It separates the parent agent's coordination rules from the worker's instructions: implement the smallest complete solution, preserve required checks and safeguards, and return a compact, evidence-based handoff.
+A portable delegation skill: complete a bounded task with a small readable
+change and a concise, evidence-based handoff.
 
-## Contents
+- [`SKILL.md`](ponytail-caveman-subagent/SKILL.md): parent coordination.
+- [`worker-instructions.md`](ponytail-caveman-subagent/references/worker-instructions.md): worker contract.
+- [`handoff.schema.json`](ponytail-caveman-subagent/references/handoff.schema.json): optional machine-readable response schema.
+- [`INSTALL.md`](INSTALL.md): host setup and the OpenCode worker prompt.
 
-- [`ponytail-caveman-subagent/SKILL.md`](ponytail-caveman-subagent/SKILL.md): parent-agent instructions and handoff schema.
-- [`ponytail-caveman-subagent/references/worker-instructions.md`](ponytail-caveman-subagent/references/worker-instructions.md): worker instructions to pass verbatim with each assignment.
-- [`opencode-worker.json`](opencode-worker.json): optional OpenCode worker-agent configuration.
-- [`INSTALL.md`](INSTALL.md): installation instructions for OpenCode and Hermes.
+## Use
 
-## Usage
+Supply an outcome, write boundary, and observable completion criteria. Add
+constraints and required checks when relevant. Load worker rules once per fresh
+context, either through a verified agent prompt or explicit injection. Follow-up
+assignments reuse retained rules. The parent checks the worker's evidence.
 
-Follow [INSTALL.md](INSTALL.md) to make the skill available to your agent host. Before delegating, the parent reads the worker instructions and includes their full text with a self-contained assignment specifying the outcome, mode, write boundary, acceptance criteria, required checks, budget, and authorized actions.
+The v2 handoff requires `status`, `result`, and `evidence_checks`; `open` is
+included when needed. Consumers of the old five-field schema must update their
+parser or explicitly supply their existing schema with the assignment.
 
-The worker returns `done`, `partial`, or `blocked`, with the result, changes or evidence, checks, and open issues. The parent verifies the handoff before reporting completion.
+## Upstream review
 
-## Limits
+Reviewed on 2026-10-20 against
+[Ponytail v5.3.2](https://github.com/DietrichGebert/ponytail/tree/v5.3.2)
+and [Caveman v4.0.1](https://github.com/JuliusBrussee/caveman/tree/v4.0.1).
+This is an independently maintained combination, not an automatic upstream sync.
 
-This package provides instructions, not an executable agent or a filesystem sandbox. Prompt-defined write boundaries must be enforced by the host when technical isolation is required. The optional OpenCode configuration restricts selected actions; it is not a comprehensive shell sandbox.
+Relevant principles retained: finish required callers and checks, preserve
+protections, document meaningful shortcut limits, support review findings with
+concrete cases, and prioritize clear language and exact technical details.
+Session modes, dashboards, proxies, and cloud integrations are outside this skill.
+No upstream software or runtime dependency is installed by loading it.
 
-The four original package files are preserved unchanged. Installation and host compatibility have not been runtime-tested in this repository.
+## Limits and evaluation
+
+Instructions do not enforce filesystem isolation. Parallel work may also need
+separate worktrees or build directories. The OpenCode example restricts selected
+actions; it is not a comprehensive shell sandbox.
+
+See [`evaluation/README.md`](evaluation/README.md) for the comparison protocol,
+observations, and unmeasured quantities. Shorter instructions alone do not prove
+lower whole-session token use, cost, or latency. Target-host OpenCode/Hermes
+runtime compatibility remains unverified here.

@@ -2,7 +2,7 @@
   "$schema": "https://opencode.ai/config.json",
   "agent": {
     "worker": {
-      "description": "Permission-restricted worker for one bounded, delegated coding, debugging, review, or research task. Pass the ponytail-caveman-subagent worker instructions verbatim plus a complete assignment in the prompt.",
+      "description": "Worker for a bounded coding, review, or research task. Supply the outcome, write boundary, and acceptance criteria.",
       "mode": "subagent",
       "permission": {
         "task": "deny",
@@ -15,7 +15,8 @@
           "git stash *": "ask",
           "git clean *": "deny"
         }
-      }
+      },
+      "prompt": "{file:../../.agents/skills/ponytail-caveman-subagent/references/worker-instructions.md}"
     }
   }
 }

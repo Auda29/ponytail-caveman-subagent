@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ponytail + Caveman Subagent"
+  short_description: "Klare Aufträge, vollständige Arbeit, knappe Belege"
+  default_prompt: "Delegiere mit $ponytail-caveman-subagent: [Ziel, erlaubte Änderungen, fertig wenn]."
+policy:
+  allow_implicit_invocation: false
