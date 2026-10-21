@@ -1,5 +1,9 @@
 # Worker comparison — 2026-10-20
 
+For the follow-up on counts, required fields, response length, and parent
+acceptance, see [Handoff regression checks](#handoff-regression-checks--2026-10-21).
+The comparison and size measurements below describe the original v2 revision.
+
 The shortened contract preserved the expected behavior in this small comparison.
 All three variants met the six task rubrics. This does not demonstrate an
 improvement in quality, whole-session cost, or latency.
@@ -115,3 +119,39 @@ For a full host comparison, run all three variants through the actual parent,
 record these counters plus correctness and rework, rotate variant order, and
 repeat tasks with fresh contexts. One run per small fixture cannot establish
 statistical reliability or behavior across models and large projects.
+
+## Handoff regression checks — 2026-10-21
+
+The follow-up checks three dimensions separately: required fields, numeric
+consistency with a Git inventory, and the task-specific response limit. These
+address the reported read-only run with wrong totals, a missing `Status`, and
+unnecessarily long acknowledgements; they do not rerun its four-model setup.
+
+`check_read_handoff.py` checks the successful-read benchmark's three-line text
+format: `Status`, `Result`, and `Evidence/checks`, with one `files_read=N` token
+in the evidence field. Separate the token with whitespace or a semicolon. It
+compares N with the frozen fixture's NUL-delimited Git inventory, including
+filenames containing newlines. Run the regression suite from the repository root:
+
+```sh
+python -B -m unittest discover -s evaluation -p test_read_handoff.py -v
+python -B evaluation/check_read_handoff.py /path/to/frozen-repo /path/to/handoff.txt
+```
+
+The checker is an offline evaluation tool, not a runtime hook or proof that files
+were read. It checks status syntax, not whether `done` is justified. A blocked
+task may legitimately need a longer response and requires separate assessment.
+Keep the fixture inventory unchanged between assignment and checking; inspect
+read coverage and source changes independently.
+
+The ten unit tests cover the reported totals of 13/14 versus 15, missing/empty or
+duplicate fields, invalid status, excessive length, conflicting or malformed
+counts, a valid acknowledgement, and Git counting with unusual filenames and
+an untracked file. Fresh-agent inputs, outputs, independent fixture checks, and
+reproduction instructions are recorded in `handoff-checks.json`.
+
+Both fresh-agent checks passed: the worker returned the correct count in three
+lines, and the parent rejected the supplied wrong count, missing status, and
+overlong file list with a targeted correction request. Both fixture inventories
+and content hashes remained unchanged. These are single smoke checks without a
+baseline; they establish neither comparative improvement nor actual read coverage.
