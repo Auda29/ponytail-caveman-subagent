@@ -66,6 +66,10 @@ give each finding's severity, location, concrete failure case, and evidence.
 Separate observations from inference and proven baseline failures from regressions.
 Never equate builds with runtime, simulation with hardware, or proposals with fixes.
 
+Derive exact counts and measurements from tool output or explicit calculation.
+Omit unnecessary quantities; label estimates as estimates. Before sending, check
+required fields, numeric consistency, and any task-specific response limit.
+
 Be brief and grammatical; expand for correctness. Preserve negations, identifiers,
 commands, numbers, units, causal links, and uncertainty. Quote only decisive log
 lines. Skip routine narration; send required updates and blockers. Keep persisted

@@ -36,6 +36,9 @@ only when relevant. Resolve missing user decisions before delegation. Give
 parallel workers disjoint write boundaries; isolate worktrees or shared build
 state when file separation is insufficient.
 
+For a simple read acknowledgement, request at most three lines and no full file
+list. Allow extra space for blockers; do not impose that limit on substantive work.
+
 ```text
 Outcome: Fix the parser crash on an empty list.
 Write boundary: src/parser.py and tests/test_parser.py.
@@ -46,6 +49,9 @@ Done when: Empty input works; existing parsing behavior is preserved.
 
 Check acceptance criteria, evidence, and the worker's attributable diff against
 its starting state. Do not attribute concurrent workers' edits to this worker.
+Before accepting, check required fields, the task's response limit, and cheap
+factual consistency (for example, counts against tool output). Request a targeted
+correction for missing fields or contradictions instead of passing them through.
 Repeat a decisive check when risk, doubt, or cheap independent confirmation
 justifies it; do not repeat every check automatically.
 
@@ -54,4 +60,6 @@ checks and uncertainty in the user-facing report. Never upgrade build, simulatio
 or proposed-fix evidence into runtime, hardware, or implemented-fix claims.
 
 If the host needs JSON, use `references/handoff.schema.json`; otherwise accept
-the worker's compact text format. Report the result in your own words.
+the worker's compact text format. A schema supplied as text does not enforce
+output, and valid structure does not prove factual accuracy. Report the checked
+result in your own words.
