@@ -144,10 +144,13 @@ task may legitimately need a longer response and requires separate assessment.
 Keep the fixture inventory unchanged between assignment and checking; inspect
 read coverage and source changes independently.
 
-The ten unit tests cover the reported totals of 13/14 versus 15, missing/empty or
+The thirteen unit tests cover the reported totals of 13/14 versus 15, missing/empty or
 duplicate fields, invalid status, excessive length, conflicting or malformed
-counts, a valid acknowledgement, and Git counting with unusual filenames and
-an untracked file. Fresh-agent inputs, outputs, independent fixture checks, and
+counts, standalone count tokens and their delimiters, a valid acknowledgement,
+and Git counting with spaces in filenames and an untracked file. A separate
+parser test supplies a NUL-delimited Git inventory containing a newline in a
+filename, so this case is also covered on Windows without creating an invalid
+local filename. Fresh-agent inputs, outputs, independent fixture checks, and
 reproduction instructions are recorded in `handoff-checks.json`.
 
 Both fresh-agent checks passed: the worker returned the correct count in three

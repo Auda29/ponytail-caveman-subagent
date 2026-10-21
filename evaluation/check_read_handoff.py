@@ -27,7 +27,7 @@ def check(text, expected_count):
             errors.append('missing or empty field: ' + key)
     if 'Status' in fields and fields['Status'] not in ('done', 'partial', 'blocked'):
         errors.append('invalid status')
-    counts = re.findall(r'\bfiles_read=([^\s;]+)', fields.get('Evidence/checks', ''))
+    counts = re.findall(r'(?:^|[\s;])files_read=([^\s;]+)', fields.get('Evidence/checks', ''))
     if len(counts) != 1:
         errors.append('expected one files_read count')
     elif not re.fullmatch(r'[0-9]+', counts[0]):
